@@ -12,6 +12,7 @@ import { fetchAvailableImageModels, FetchedModel } from "@/lib/models";
 import { cn } from "@/lib/utils";
 import { Select } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import { ImageUpload } from "@/components/image-upload";
 import { Eye, EyeOff, Sparkles, ChevronDown, ChevronUp, RefreshCw } from "lucide-react";
 
 const SETTINGS_KEY = "imagen_settings";
@@ -27,6 +28,7 @@ const defaultSettings: GenerationSettings = {
   personGeneration: "ALLOW_ADULT",
   seed: null,
   language: "auto",
+  uploadedImages: [],
 };
 
 const ASPECT_RATIOS: { value: AspectRatio; label: string }[] = [
@@ -117,6 +119,7 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
       const next = { ...prev, [key]: value };
       const toSave = { ...next };
       delete (toSave as Record<string, unknown>).prompt;
+      delete (toSave as Record<string, unknown>).uploadedImages;
       localStorage.setItem(SETTINGS_KEY, JSON.stringify(toSave));
       return next;
     });
@@ -232,6 +235,31 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
           <p className="text-xs text-amber-500/80">
             Gemini models: aspect ratio & negative prompt are not supported
           </p>
+        )}
+      </div>
+
+      {/* Image Upload */}
+      <div className="space-y-1.5">
+        <div className="flex items-center justify-between">
+          <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+            Input Images
+          </label>
+          {settings.uploadedImages.length > 0 && (
+            <button
+              type="button"
+              onClick={() => update("uploadedImages", [])}
+              className="text-xs text-zinc-600 hover:text-red-400 transition-colors"
+            >
+              Clear all
+            </button>
+          )}
+        </div>
+        <ImageUpload
+          images={settings.uploadedImages}
+          onChange={(imgs) => update("uploadedImages", imgs)}
+        />
+        {settings.uploadedImages.length > 0 && !isGemini && (
+          <p className="text-xs text-amber-500/80">Image input works best with Gemini models</p>
         )}
       </div>
 

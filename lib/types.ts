@@ -15,6 +15,13 @@ export function getModelFamily(model: ImageModel): ModelFamily {
   return model.startsWith("gemini") ? "gemini" : "imagen";
 }
 
+export interface UploadedImage {
+  id: string;
+  base64: string;
+  mimeType: string;
+  name: string;
+}
+
 export interface GenerationSettings {
   apiKey: string;
   model: ImageModel;
@@ -26,6 +33,7 @@ export interface GenerationSettings {
   personGeneration: PersonGeneration;
   seed: number | null;
   language: string;
+  uploadedImages: UploadedImage[];
 }
 
 export interface GeneratedImage {

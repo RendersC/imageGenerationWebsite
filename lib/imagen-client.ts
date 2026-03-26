@@ -24,8 +24,16 @@ async function generateWithGemini(
   for (let i = 0; i < numberOfImages; i++) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
+    const parts: unknown[] = [];
+
+    // Add uploaded images first so the model sees them before the prompt
+    for (const img of settings.uploadedImages ?? []) {
+      parts.push({ inlineData: { mimeType: img.mimeType, data: img.base64 } });
+    }
+    parts.push({ text: prompt });
+
     const body = {
-      contents: [{ parts: [{ text: prompt }] }],
+      contents: [{ parts }],
       generationConfig: {
         responseModalities: ["image", "text"],
       },
