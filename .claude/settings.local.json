@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(python \"C:/Users/Crews/.claude/plugins/marketplaces/ui-ux-pro-max-skill/src/ui-ux-pro-max/scripts/search.py\" \"AI image generation creative tool dark modern premium\" --design-system -p \"ImageGen Studio\")"
     ]
   }
 }

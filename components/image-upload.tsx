@@ -59,17 +59,17 @@ export function ImageUpload({ images, onChange }: Props) {
               <img
                 src={`data:${img.mimeType};base64,${img.base64}`}
                 alt={img.name}
-                className="w-16 h-16 object-cover rounded-lg border border-zinc-700"
+                className="w-16 h-16 object-cover rounded-xl border border-white/[0.1]"
               />
               <button
                 type="button"
                 onClick={() => remove(img.id)}
-                className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 hover:bg-red-400 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 hover:bg-red-400 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
               >
                 <X size={10} className="text-white" />
               </button>
-              <div className="absolute inset-0 rounded-lg bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <span className="text-[9px] text-white text-center px-1 truncate">{img.name}</span>
+              <div className="absolute inset-0 rounded-xl bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <span className="text-[9px] text-white/80 text-center px-1 truncate">{img.name}</span>
               </div>
             </div>
           ))}
@@ -78,14 +78,14 @@ export function ImageUpload({ images, onChange }: Props) {
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
-            className="w-16 h-16 rounded-lg border border-dashed border-zinc-700 hover:border-violet-500 flex items-center justify-center text-zinc-600 hover:text-violet-400 transition-colors"
+            className="w-16 h-16 rounded-xl border border-dashed border-white/[0.1] hover:border-violet-500/50 flex items-center justify-center text-white/20 hover:text-violet-400/80 transition-all duration-200 cursor-pointer"
           >
-            <ImagePlus size={18} />
+            <ImagePlus size={17} />
           </button>
         </div>
       )}
 
-      {/* Drop zone — shown when no images */}
+      {/* Drop zone */}
       {images.length === 0 && (
         <div
           onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
@@ -93,16 +93,16 @@ export function ImageUpload({ images, onChange }: Props) {
           onDrop={onDrop}
           onClick={() => inputRef.current?.click()}
           className={cn(
-            "flex flex-col items-center justify-center gap-2 py-5 rounded-xl border border-dashed cursor-pointer transition-all",
+            "flex flex-col items-center justify-center gap-2 py-5 rounded-xl border border-dashed cursor-pointer transition-all duration-200",
             dragging
-              ? "border-violet-500 bg-violet-500/10 text-violet-300"
-              : "border-zinc-700 hover:border-zinc-500 text-zinc-500 hover:text-zinc-400"
+              ? "border-violet-500/60 bg-violet-500/[0.07] text-violet-300/80"
+              : "border-white/[0.08] hover:border-violet-500/30 text-white/20 hover:text-white/40"
           )}
         >
-          <Upload size={20} />
+          <Upload size={18} />
           <div className="text-center">
             <p className="text-xs font-medium">Drop images here or click to upload</p>
-            <p className="text-[10px] text-zinc-600 mt-0.5">PNG, JPG, WEBP</p>
+            <p className="text-[10px] text-white/20 mt-0.5">PNG, JPG, WEBP</p>
           </div>
         </div>
       )}

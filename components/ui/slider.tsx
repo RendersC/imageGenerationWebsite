@@ -17,11 +17,11 @@ export function Slider({ value, min, max, onChange, marks }: Props) {
     <div className="space-y-3">
       <div className="relative h-6 flex items-center">
         {/* Track background */}
-        <div className="absolute inset-x-0 h-1.5 rounded-full bg-zinc-700" />
+        <div className="absolute inset-x-0 h-1 rounded-full bg-white/[0.08]" />
 
         {/* Filled track */}
         <div
-          className="absolute h-1.5 rounded-full bg-gradient-to-r from-violet-600 to-violet-400 transition-all"
+          className="absolute h-1 rounded-full bg-gradient-to-r from-violet-600 to-violet-400 transition-all"
           style={{ width: `${percent}%` }}
         />
 
@@ -38,7 +38,7 @@ export function Slider({ value, min, max, onChange, marks }: Props) {
 
         {/* Custom thumb */}
         <div
-          className="absolute w-4 h-4 rounded-full bg-white shadow-lg shadow-violet-500/30 border-2 border-violet-500 pointer-events-none transition-all"
+          className="absolute w-4 h-4 rounded-full bg-white shadow-lg shadow-violet-500/40 border-2 border-violet-500 pointer-events-none transition-all"
           style={{ left: `calc(${percent}% - 8px)` }}
         />
       </div>
@@ -50,7 +50,7 @@ export function Slider({ value, min, max, onChange, marks }: Props) {
               key={m}
               type="button"
               onClick={() => onChange(m)}
-              className="text-xs text-zinc-600 hover:text-zinc-400 transition-colors tabular-nums"
+              className="text-[10px] text-white/25 hover:text-white/55 transition-colors tabular-nums cursor-pointer"
             >
               {m}
             </button>

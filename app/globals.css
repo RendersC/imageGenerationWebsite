@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #09090b;
-  --foreground: #fafafa;
+  --background: #07070e;
+  --foreground: #ededf5;
 }
 
 @theme inline {
@@ -15,9 +15,40 @@
 body {
   background: var(--background);
   color: var(--foreground);
+  background-image:
+    radial-gradient(ellipse 80% 55% at 12% 0%, rgba(124, 58, 237, 0.09) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 40% at 88% 100%, rgba(37, 99, 235, 0.05) 0%, transparent 60%);
+  background-attachment: fixed;
 }
 
 html, body {
   height: 100%;
   overflow: hidden;
+}
+
+/* Thin violet scrollbar */
+::-webkit-scrollbar { width: 3px; height: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.3);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.55);
+}
+
+/* Generate button pulsing glow */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(124, 58, 237, 0.45), 0 3px 14px rgba(0, 0, 0, 0.5); }
+  50%       { box-shadow: 0 0 36px rgba(139, 92, 246, 0.65), 0 3px 14px rgba(0, 0, 0, 0.5); }
+}
+
+.glow-pulse { animation: glow-pulse 2.6s ease-in-out infinite; }
+
+/* Gradient violet text */
+.text-gradient-violet {
+  background: linear-gradient(135deg, #c4b5fd 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

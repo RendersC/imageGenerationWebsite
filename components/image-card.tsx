@@ -33,7 +33,7 @@ export function ImageCard({ image, index, onFavorite, onRegenerate, onOpen, rege
   }
 
   return (
-    <div className="group relative rounded-xl overflow-hidden bg-zinc-800 border border-zinc-700/50 hover:border-violet-500/50 transition-all">
+    <div className="group relative rounded-2xl overflow-hidden bg-white/[0.04] border border-white/[0.08] hover:border-violet-500/40 transition-all duration-300 hover:shadow-[0_0_30px_rgba(124,58,237,0.15)]">
       {/* Image */}
       <div
         className="relative cursor-zoom-in"
@@ -44,54 +44,54 @@ export function ImageCard({ image, index, onFavorite, onRegenerate, onOpen, rege
           alt={image.prompt}
           className={cn(
             "w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]",
-            regenarting && "opacity-40"
+            regenarting && "opacity-30"
           )}
         />
 
         {regenarting && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <RefreshCw size={32} className="text-violet-400 animate-spin" />
+            <RefreshCw size={28} className="text-violet-400 animate-spin" />
           </div>
         )}
 
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
 
         {/* Zoom icon */}
-        <div className="absolute top-2 right-2 bg-black/60 rounded-lg p-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-          <ZoomIn size={14} className="text-white" />
+        <div className="absolute top-2 right-2 bg-black/50 backdrop-blur-sm rounded-lg p-1.5 opacity-0 group-hover:opacity-100 transition-all duration-200">
+          <ZoomIn size={13} className="text-white/80" />
         </div>
       </div>
 
       {/* Actions */}
-      <div className="absolute bottom-0 left-0 right-0 p-2 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="absolute bottom-0 left-0 right-0 p-2 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-200">
         <div className="flex gap-1.5">
           <ActionBtn onClick={handleDownload} title="Download">
-            <Download size={13} />
+            <Download size={12} />
           </ActionBtn>
           <ActionBtn onClick={handleCopy} title={copied ? "Copied!" : "Copy"}>
-            {copied ? <Check size={13} className="text-green-400" /> : <Copy size={13} />}
+            {copied ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
           </ActionBtn>
           <ActionBtn onClick={() => onRegenerate(image)} title="Regenerate">
-            <RefreshCw size={13} />
+            <RefreshCw size={12} />
           </ActionBtn>
         </div>
 
         <button
           onClick={(e) => { e.stopPropagation(); onFavorite(image.id); }}
           className={cn(
-            "p-1.5 rounded-lg backdrop-blur-sm transition-colors",
+            "p-1.5 rounded-lg backdrop-blur-md transition-all duration-200 cursor-pointer",
             image.favorite
-              ? "bg-pink-600/80 text-white"
-              : "bg-black/60 text-zinc-300 hover:text-pink-400"
+              ? "bg-pink-600/70 text-white shadow-[0_0_10px_rgba(236,72,153,0.3)]"
+              : "bg-black/50 text-white/50 hover:text-pink-400"
           )}
         >
-          <Heart size={13} fill={image.favorite ? "currentColor" : "none"} />
+          <Heart size={12} fill={image.favorite ? "currentColor" : "none"} />
         </button>
       </div>
 
       {/* Image number badge */}
-      <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm rounded-md px-1.5 py-0.5 text-xs text-zinc-300">
+      <div className="absolute top-2 left-2 bg-black/50 backdrop-blur-md rounded-lg px-1.5 py-0.5 text-[10px] text-white/55 font-medium">
         #{index + 1}
       </div>
     </div>
@@ -103,7 +103,7 @@ function ActionBtn({ onClick, title, children }: { onClick: () => void; title: s
     <button
       onClick={(e) => { e.stopPropagation(); onClick(); }}
       title={title}
-      className="p-1.5 bg-black/60 backdrop-blur-sm rounded-lg text-zinc-300 hover:text-white hover:bg-black/80 transition-colors"
+      className="p-1.5 bg-black/50 backdrop-blur-md rounded-lg text-white/50 hover:text-white hover:bg-black/70 transition-all duration-200 cursor-pointer"
     >
       {children}
     </button>

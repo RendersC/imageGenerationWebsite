@@ -6,7 +6,7 @@ import { Gallery } from "@/components/gallery";
 import { HistoryPanel } from "@/components/history-panel";
 import { useGeneration } from "@/hooks/use-generation";
 import { GenerationHistory, GenerationSettings } from "@/lib/types";
-import { Clock, ImageIcon, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { Clock, PanelLeftClose, PanelLeftOpen, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type Tab = "generate" | "history";
@@ -41,26 +41,26 @@ export default function Home() {
   }
 
   return (
-    <div className="flex h-screen bg-zinc-950 text-white overflow-hidden">
+    <div className="flex h-screen bg-[#07070e] text-[#ededf5] overflow-hidden">
       {/* Sidebar */}
       <aside
         className={cn(
-          "flex flex-col border-r border-zinc-800 bg-zinc-900 transition-all duration-300 flex-shrink-0",
+          "flex flex-col border-r border-white/[0.06] bg-[#0b0b14] transition-all duration-300 flex-shrink-0",
           sidebarOpen ? "w-80" : "w-0 overflow-hidden border-r-0"
         )}
       >
         {/* Sidebar tabs */}
-        <div className="flex border-b border-zinc-800 flex-shrink-0">
+        <div className="flex border-b border-white/[0.06] flex-shrink-0">
           <SidebarTab
             active={activeTab === "generate"}
             onClick={() => setActiveTab("generate")}
-            icon={<ImageIcon size={14} />}
+            icon={<Sparkles size={13} />}
             label="Generate"
           />
           <SidebarTab
             active={activeTab === "history"}
             onClick={() => setActiveTab("history")}
-            icon={<Clock size={14} />}
+            icon={<Clock size={13} />}
             label="History"
           />
         </div>
@@ -88,23 +88,23 @@ export default function Home() {
       {/* Main area */}
       <div className="flex flex-col flex-1 min-w-0">
         {/* Header */}
-        <header className="flex items-center gap-3 px-4 py-3 border-b border-zinc-800 flex-shrink-0">
+        <header className="flex items-center gap-3 px-4 py-3 border-b border-white/[0.06] flex-shrink-0">
           <button
             onClick={() => setSidebarOpen((v) => !v)}
-            className="p-1.5 hover:bg-zinc-800 rounded-lg text-zinc-500 hover:text-zinc-300 transition-colors"
+            className="p-1.5 hover:bg-white/[0.06] rounded-lg text-white/25 hover:text-white/60 transition-all duration-200 cursor-pointer"
           >
-            {sidebarOpen ? <PanelLeftClose size={18} /> : <PanelLeftOpen size={18} />}
+            {sidebarOpen ? <PanelLeftClose size={17} /> : <PanelLeftOpen size={17} />}
           </button>
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-violet-600 flex items-center justify-center">
-              <ImageIcon size={13} className="text-white" />
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-purple-700 flex items-center justify-center shadow-[0_0_14px_rgba(124,58,237,0.5)]">
+              <Sparkles size={13} className="text-white" />
             </div>
-            <span className="font-semibold text-sm">Imagen Generator</span>
+            <span className="font-semibold text-sm text-gradient-violet">Imagen Studio</span>
           </div>
           {loading && (
-            <div className="ml-auto flex items-center gap-2 text-xs text-zinc-500">
-              <div className="w-3 h-3 rounded-full border-2 border-violet-500/30 border-t-violet-500 animate-spin" />
-              Generating {progress.done}/{progress.total}
+            <div className="ml-auto flex items-center gap-2 text-xs">
+              <div className="w-3.5 h-3.5 rounded-full border-2 border-violet-500/20 border-t-violet-400 animate-spin" />
+              <span className="text-violet-400/70">Generating {progress.done}/{progress.total}</span>
             </div>
           )}
         </header>
@@ -140,10 +140,10 @@ function SidebarTab({
     <button
       onClick={onClick}
       className={cn(
-        "flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-medium transition-colors border-b-2",
+        "flex-1 flex items-center justify-center gap-1.5 py-3.5 text-xs font-medium transition-all duration-200 border-b-2 cursor-pointer",
         active
           ? "border-violet-500 text-violet-400"
-          : "border-transparent text-zinc-500 hover:text-zinc-300"
+          : "border-transparent text-white/25 hover:text-white/60"
       )}
     >
       {icon}

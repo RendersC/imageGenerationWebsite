@@ -93,7 +93,6 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
     try {
       const fetched = await fetchAvailableImageModels(apiKey);
       setModels(fetched);
-      // If current model not in list, switch to first available
       if (fetched.length > 0 && !fetched.find((m) => m.id === settings.model)) {
         update("model", fetched[0].id);
       }
@@ -104,7 +103,6 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
     }
   }, [settings.model]);
 
-  // Auto-load models when API key is set
   useEffect(() => {
     if (settings.apiKey && settings.apiKey.length > 10 && models.length === 0) {
       loadModels(settings.apiKey);
@@ -134,11 +132,15 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
 
   const isGemini = getModelFamily(settings.model) === "gemini";
 
+  const fieldLabel = "text-[10px] font-semibold text-white/40 uppercase tracking-widest";
+  const inputClass = "w-full bg-white/[0.05] border border-white/[0.1] rounded-xl px-3 py-2.5 text-sm text-white/90 focus:outline-none focus:border-violet-500/60 focus:shadow-[0_0_0_3px_rgba(124,58,237,0.1)] placeholder-white/20 transition-all duration-200";
+
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5 p-5 h-full overflow-y-auto">
+
       {/* API Key */}
       <div className="space-y-1.5">
-        <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">API Key</label>
+        <label className={fieldLabel}>API Key</label>
         <div className="relative">
           <input
             type={showApiKey ? "text" : "password"}
@@ -146,36 +148,36 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
             onChange={(e) => update("apiKey", e.target.value)}
             onBlur={() => loadModels(settings.apiKey)}
             placeholder="AIza..."
-            className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-white pr-10 focus:outline-none focus:border-violet-500 placeholder-zinc-600"
+            className={cn(inputClass, "pr-10")}
           />
           <button
             type="button"
             onClick={() => setShowApiKey((v) => !v)}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/25 hover:text-white/60 transition-colors cursor-pointer"
           >
-            {showApiKey ? <EyeOff size={16} /> : <Eye size={16} />}
+            {showApiKey ? <EyeOff size={15} /> : <Eye size={15} />}
           </button>
         </div>
-        <p className="text-xs text-zinc-600">Stored locally, never sent to our server</p>
+        <p className="text-[10px] text-white/20">Stored locally, never sent to our server</p>
       </div>
 
       {/* Model */}
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
-          <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Model</label>
+          <label className={fieldLabel}>Model</label>
           <button
             type="button"
             onClick={() => loadModels(settings.apiKey)}
             disabled={modelsLoading || !settings.apiKey}
-            className="flex items-center gap-1 text-xs text-zinc-600 hover:text-zinc-300 disabled:opacity-40 transition-colors"
+            className="flex items-center gap-1 text-[10px] text-white/25 hover:text-white/60 disabled:opacity-30 transition-colors cursor-pointer"
           >
-            <RefreshCw size={11} className={modelsLoading ? "animate-spin" : ""} />
+            <RefreshCw size={10} className={modelsLoading ? "animate-spin" : ""} />
             {modelsLoading ? "Loading..." : "Refresh"}
           </button>
         </div>
 
         {modelsError && (
-          <p className="text-xs text-red-400">{modelsError}</p>
+          <p className="text-xs text-red-400/80">{modelsError}</p>
         )}
 
         {models.length > 0 ? (
@@ -186,16 +188,16 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
                 type="button"
                 onClick={() => update("model", m.id)}
                 className={cn(
-                  "rounded-lg px-3 py-2 text-xs font-medium border transition-colors text-left",
+                  "rounded-xl px-3 py-2 text-xs font-medium border transition-all duration-200 text-left cursor-pointer",
                   settings.model === m.id
-                    ? "bg-violet-600 border-violet-500 text-white"
-                    : "bg-zinc-800 border-zinc-700 text-zinc-300 hover:border-zinc-500"
+                    ? "bg-violet-600/80 border-violet-500/70 text-white shadow-[0_0_14px_rgba(124,58,237,0.3)]"
+                    : "bg-white/[0.04] border-white/[0.08] text-white/55 hover:border-violet-500/30 hover:text-white/80"
                 )}
               >
                 <div className="font-semibold truncate">{m.displayName}</div>
                 <div className={cn(
                   "text-[10px] mt-0.5 truncate",
-                  settings.model === m.id ? "text-violet-200" : "text-zinc-500"
+                  settings.model === m.id ? "text-violet-200/80" : "text-white/25"
                 )}>
                   {m.id}
                 </div>
@@ -204,7 +206,6 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-2">
-            {/* Fallback while no API key entered yet */}
             {[
               { id: "gemini-2.5-flash-image", displayName: "Nano Banana" },
             ].map((m) => (
@@ -213,26 +214,26 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
                 type="button"
                 onClick={() => update("model", m.id)}
                 className={cn(
-                  "rounded-lg px-3 py-2 text-xs font-medium border transition-colors text-left",
+                  "rounded-xl px-3 py-2 text-xs font-medium border transition-all duration-200 text-left cursor-pointer",
                   settings.model === m.id
-                    ? "bg-violet-600 border-violet-500 text-white"
-                    : "bg-zinc-800 border-zinc-700 text-zinc-300 hover:border-zinc-500"
+                    ? "bg-violet-600/80 border-violet-500/70 text-white shadow-[0_0_14px_rgba(124,58,237,0.3)]"
+                    : "bg-white/[0.04] border-white/[0.08] text-white/55 hover:border-violet-500/30 hover:text-white/80"
                 )}
               >
                 <div className="font-semibold">{m.displayName}</div>
-                <div className={cn("text-[10px] mt-0.5", settings.model === m.id ? "text-violet-200" : "text-zinc-500")}>
+                <div className={cn("text-[10px] mt-0.5", settings.model === m.id ? "text-violet-200/80" : "text-white/25")}>
                   {m.id}
                 </div>
               </button>
             ))}
             {!settings.apiKey && (
-              <p className="text-xs text-zinc-600">Enter API key to load all available models</p>
+              <p className="text-[10px] text-white/20">Enter API key to load all available models</p>
             )}
           </div>
         )}
 
         {isGemini && (
-          <p className="text-xs text-amber-500/80">
+          <p className="text-[10px] text-amber-400/70">
             Gemini models: aspect ratio & negative prompt are not supported
           </p>
         )}
@@ -241,14 +242,12 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
       {/* Image Upload */}
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
-          <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
-            Input Images
-          </label>
+          <label className={fieldLabel}>Input Images</label>
           {settings.uploadedImages.length > 0 && (
             <button
               type="button"
               onClick={() => update("uploadedImages", [])}
-              className="text-xs text-zinc-600 hover:text-red-400 transition-colors"
+              className="text-[10px] text-white/25 hover:text-red-400/80 transition-colors cursor-pointer"
             >
               Clear all
             </button>
@@ -259,22 +258,22 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
           onChange={(imgs) => update("uploadedImages", imgs)}
         />
         {settings.uploadedImages.length > 0 && !isGemini && (
-          <p className="text-xs text-amber-500/80">Image input works best with Gemini models</p>
+          <p className="text-[10px] text-amber-400/70">Image input works best with Gemini models</p>
         )}
       </div>
 
       {/* Prompt */}
       <div className="space-y-1.5">
         <div className="flex justify-between items-center">
-          <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Prompt</label>
-          <span className="text-xs text-zinc-600">{settings.prompt.length}/2000</span>
+          <label className={fieldLabel}>Prompt</label>
+          <span className="text-[10px] text-white/20 tabular-nums">{settings.prompt.length}/2000</span>
         </div>
         <textarea
           value={settings.prompt}
           onChange={(e) => update("prompt", e.target.value.slice(0, 2000))}
           placeholder="Describe the image you want to generate..."
           rows={4}
-          className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-white resize-none focus:outline-none focus:border-violet-500 placeholder-zinc-600"
+          className={cn(inputClass, "resize-none")}
         />
       </div>
 
@@ -282,15 +281,15 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
       {!isGemini && (
         <div className="space-y-1.5">
           <div className="flex justify-between items-center">
-            <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Negative Prompt</label>
-            <span className="text-xs text-zinc-600">{settings.negativePrompt.length}/2000</span>
+            <label className={fieldLabel}>Negative Prompt</label>
+            <span className="text-[10px] text-white/20 tabular-nums">{settings.negativePrompt.length}/2000</span>
           </div>
           <textarea
             value={settings.negativePrompt}
             onChange={(e) => update("negativePrompt", e.target.value.slice(0, 2000))}
             placeholder="What to avoid in the image..."
             rows={2}
-            className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-white resize-none focus:outline-none focus:border-violet-500 placeholder-zinc-600"
+            className={cn(inputClass, "resize-none")}
           />
         </div>
       )}
@@ -298,8 +297,8 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
       {/* Number of Images */}
       <div className="space-y-2">
         <div className="flex justify-between items-center">
-          <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Number of Images</label>
-          <span className="text-violet-400 font-bold text-lg">{settings.numberOfImages}</span>
+          <label className={fieldLabel}>Number of Images</label>
+          <span className="text-violet-400 font-semibold text-base tabular-nums">{settings.numberOfImages}</span>
         </div>
         <Slider
           value={settings.numberOfImages}
@@ -309,12 +308,12 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
           marks={[1, 5, 10, 15, 20]}
         />
         {isGemini && settings.numberOfImages > 1 && (
-          <p className="text-xs text-amber-500/80">
+          <p className="text-[10px] text-amber-400/70">
             Will make {settings.numberOfImages} separate API requests
           </p>
         )}
         {!isGemini && settings.numberOfImages > 4 && (
-          <p className="text-xs text-amber-500/80">
+          <p className="text-[10px] text-amber-400/70">
             Will make {Math.ceil(settings.numberOfImages / 4)} API requests (max 4 per call)
           </p>
         )}
@@ -323,7 +322,7 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
       {/* Aspect Ratio — Imagen only */}
       {!isGemini && (
         <div className="space-y-1.5">
-          <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Aspect Ratio</label>
+          <label className={fieldLabel}>Aspect Ratio</label>
           <div className="flex gap-2 flex-wrap">
             {ASPECT_RATIOS.map((ar) => (
               <button
@@ -331,10 +330,10 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
                 type="button"
                 onClick={() => update("aspectRatio", ar.value)}
                 className={cn(
-                  "px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors",
+                  "px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-200 cursor-pointer",
                   settings.aspectRatio === ar.value
-                    ? "bg-violet-600 border-violet-500 text-white"
-                    : "bg-zinc-800 border-zinc-700 text-zinc-300 hover:border-zinc-500"
+                    ? "bg-violet-600/80 border-violet-500/70 text-white"
+                    : "bg-white/[0.04] border-white/[0.08] text-white/55 hover:border-violet-500/30 hover:text-white/80"
                 )}
               >
                 {ar.label}
@@ -345,20 +344,20 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
       )}
 
       {/* Advanced Settings */}
-      <div className="rounded-lg border border-zinc-700">
+      <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] overflow-hidden">
         <button
           type="button"
           onClick={() => setAdvancedOpen((v) => !v)}
-          className="w-full flex items-center justify-between px-4 py-3 text-xs font-semibold text-zinc-400 uppercase tracking-wider hover:text-zinc-200 transition-colors"
+          className="w-full flex items-center justify-between px-4 py-3 text-[10px] font-semibold text-white/35 uppercase tracking-widest hover:text-white/60 transition-colors cursor-pointer"
         >
           <span>Advanced Settings</span>
-          {advancedOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          {advancedOpen ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
         </button>
 
         {advancedOpen && (
-          <div className="border-t border-zinc-700 px-4 pt-4 pb-4 space-y-4">
+          <div className="border-t border-white/[0.07] px-4 pt-4 pb-4 space-y-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Safety Filter</label>
+              <label className={fieldLabel}>Safety Filter</label>
               <Select
                 value={settings.safetyFilterLevel}
                 onChange={(v) => update("safetyFilterLevel", v as SafetyLevel)}
@@ -373,7 +372,7 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
 
             {!isGemini && (
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Person Generation</label>
+                <label className={fieldLabel}>Person Generation</label>
                 <Select
                   value={settings.personGeneration}
                   onChange={(v) => update("personGeneration", v as PersonGeneration)}
@@ -388,7 +387,7 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
 
             {!isGemini && (
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Language</label>
+                <label className={fieldLabel}>Language</label>
                 <Select
                   value={settings.language}
                   onChange={(v) => update("language", v)}
@@ -400,8 +399,12 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
             {!isGemini && (
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Seed</label>
-                  <button type="button" onClick={() => update("seed", null)} className="text-xs text-zinc-500 hover:text-zinc-300">
+                  <label className={fieldLabel}>Seed</label>
+                  <button
+                    type="button"
+                    onClick={() => update("seed", null)}
+                    className="text-[10px] text-white/25 hover:text-violet-400 transition-colors cursor-pointer"
+                  >
                     Random
                   </button>
                 </div>
@@ -410,7 +413,7 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
                   value={settings.seed ?? ""}
                   onChange={(e) => update("seed", e.target.value === "" ? null : Number(e.target.value))}
                   placeholder="Leave empty for random"
-                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-violet-500 placeholder-zinc-600"
+                  className={inputClass}
                 />
               </div>
             )}
@@ -423,13 +426,13 @@ export function SettingsPanel({ onGenerate, loading, restoredSettings, onRestore
         type="submit"
         disabled={loading}
         className={cn(
-          "w-full py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all",
+          "w-full py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all duration-200",
           loading
-            ? "bg-violet-800 text-violet-400 cursor-not-allowed"
-            : "bg-violet-600 hover:bg-violet-500 text-white active:scale-95"
+            ? "bg-gradient-to-r from-violet-800/50 to-purple-800/50 text-violet-300/40 cursor-not-allowed"
+            : "bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white glow-pulse cursor-pointer active:scale-[0.98]"
         )}
       >
-        <Sparkles size={16} />
+        <Sparkles size={15} />
         {loading
           ? "Generating..."
           : `Generate ${settings.numberOfImages} Image${settings.numberOfImages > 1 ? "s" : ""}`}

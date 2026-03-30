@@ -51,24 +51,23 @@ export function Gallery({ images, loading, progress, error, onFavorite, onRegene
     return (
       <div className="flex flex-col items-center justify-center h-full gap-6 p-8">
         <div className="relative">
-          <div className="w-20 h-20 rounded-full border-4 border-violet-500/20 border-t-violet-500 animate-spin" />
+          <div className="w-20 h-20 rounded-full border-2 border-violet-500/10 border-t-violet-500 animate-spin shadow-[0_0_24px_rgba(124,58,237,0.25)]" />
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-violet-400 font-bold text-lg">
+            <span className="text-violet-400 font-semibold text-base tabular-nums">
               {progress.total > 0 ? Math.round((progress.done / progress.total) * 100) : 0}%
             </span>
           </div>
         </div>
         <div className="text-center">
-          <p className="text-white font-medium">Generating images...</p>
-          <p className="text-zinc-500 text-sm mt-1">
+          <p className="text-white/80 font-medium">Generating images...</p>
+          <p className="text-white/25 text-sm mt-1">
             {progress.done} / {progress.total} completed
           </p>
         </div>
-        {/* Progress bar */}
         {progress.total > 0 && (
-          <div className="w-64 bg-zinc-800 rounded-full h-2">
+          <div className="w-64 bg-white/[0.06] rounded-full h-1 overflow-hidden">
             <div
-              className="bg-violet-500 h-2 rounded-full transition-all duration-500"
+              className="bg-gradient-to-r from-violet-600 to-purple-500 h-1 rounded-full transition-all duration-500"
               style={{ width: `${(progress.done / progress.total) * 100}%` }}
             />
           </div>
@@ -80,22 +79,22 @@ export function Gallery({ images, loading, progress, error, onFavorite, onRegene
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center h-full gap-3 p-8">
-        <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 text-2xl">!</div>
-        <p className="text-red-400 font-medium text-center">Generation Failed</p>
-        <p className="text-zinc-500 text-sm text-center max-w-sm">{error}</p>
+        <div className="w-12 h-12 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 text-xl font-bold">!</div>
+        <p className="text-red-400/80 font-medium text-center">Generation Failed</p>
+        <p className="text-white/25 text-sm text-center max-w-sm">{error}</p>
       </div>
     );
   }
 
   if (images.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-full gap-4 p-8 text-center">
-        <div className="w-24 h-24 rounded-2xl bg-zinc-800/50 border border-zinc-700/50 flex items-center justify-center">
-          <LayoutGrid size={36} className="text-zinc-600" />
+      <div className="flex flex-col items-center justify-center h-full gap-5 p-8 text-center">
+        <div className="w-24 h-24 rounded-2xl bg-white/[0.03] border border-white/[0.07] flex items-center justify-center shadow-[0_0_50px_rgba(124,58,237,0.06)]">
+          <LayoutGrid size={32} className="text-white/15" />
         </div>
         <div>
-          <p className="text-zinc-400 font-medium">No images yet</p>
-          <p className="text-zinc-600 text-sm mt-1">Configure settings and click Generate</p>
+          <p className="text-white/45 font-medium">No images yet</p>
+          <p className="text-white/20 text-sm mt-1">Configure your settings and click Generate</p>
         </div>
       </div>
     );
@@ -104,13 +103,15 @@ export function Gallery({ images, loading, progress, error, onFavorite, onRegene
   return (
     <div className="flex flex-col h-full">
       {/* Toolbar */}
-      <div className="flex items-center justify-between px-5 py-3 border-b border-zinc-800">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/[0.06]">
+        <div className="flex items-center gap-1.5">
           <button
             onClick={() => setFilter("all")}
             className={cn(
-              "px-3 py-1.5 rounded-lg text-xs font-medium transition-colors",
-              filter === "all" ? "bg-zinc-700 text-white" : "text-zinc-500 hover:text-zinc-300"
+              "px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer",
+              filter === "all"
+                ? "bg-white/[0.08] text-white"
+                : "text-white/30 hover:text-white/60"
             )}
           >
             All ({images.length})
@@ -118,8 +119,10 @@ export function Gallery({ images, loading, progress, error, onFavorite, onRegene
           <button
             onClick={() => setFilter("favorites")}
             className={cn(
-              "px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors",
-              filter === "favorites" ? "bg-zinc-700 text-white" : "text-zinc-500 hover:text-zinc-300"
+              "px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-all duration-200 cursor-pointer",
+              filter === "favorites"
+                ? "bg-white/[0.08] text-white"
+                : "text-white/30 hover:text-white/60"
             )}
           >
             <Heart size={11} fill={filter === "favorites" ? "currentColor" : "none"} />
@@ -129,36 +132,42 @@ export function Gallery({ images, loading, progress, error, onFavorite, onRegene
 
         <div className="flex items-center gap-2">
           {/* Grid toggle */}
-          <div className="flex bg-zinc-800 rounded-lg p-0.5">
+          <div className="flex bg-white/[0.05] rounded-lg p-0.5 border border-white/[0.06]">
             <button
               onClick={() => setColumns(2)}
-              className={cn("p-1.5 rounded-md transition-colors", columns === 2 ? "bg-zinc-600 text-white" : "text-zinc-500")}
+              className={cn(
+                "p-1.5 rounded-md transition-all duration-200 cursor-pointer",
+                columns === 2 ? "bg-white/[0.1] text-white" : "text-white/25 hover:text-white/50"
+              )}
             >
-              <Grid2X2 size={14} />
+              <Grid2X2 size={13} />
             </button>
             <button
               onClick={() => setColumns(3)}
-              className={cn("p-1.5 rounded-md transition-colors", columns === 3 ? "bg-zinc-600 text-white" : "text-zinc-500")}
+              className={cn(
+                "p-1.5 rounded-md transition-all duration-200 cursor-pointer",
+                columns === 3 ? "bg-white/[0.1] text-white" : "text-white/25 hover:text-white/50"
+              )}
             >
-              <LayoutGrid size={14} />
+              <LayoutGrid size={13} />
             </button>
           </div>
 
           <button
             onClick={handleDownloadAll}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-lg text-xs font-medium transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-white/[0.05] hover:bg-white/[0.08] text-white/45 hover:text-white/80 rounded-lg text-xs font-medium transition-all duration-200 border border-white/[0.07] cursor-pointer"
           >
-            <Download size={13} />
-            Download All ZIP
+            <Download size={12} />
+            Download All
           </button>
         </div>
       </div>
 
       {/* Progress bar (loading more) */}
       {loading && (
-        <div className="h-0.5 bg-zinc-800">
+        <div className="h-px bg-white/[0.04]">
           <div
-            className="h-0.5 bg-violet-500 transition-all duration-500"
+            className="h-px bg-gradient-to-r from-violet-600 to-purple-500 transition-all duration-500"
             style={{ width: `${progress.total > 0 ? (progress.done / progress.total) * 100 : 30}%` }}
           />
         </div>
@@ -166,10 +175,10 @@ export function Gallery({ images, loading, progress, error, onFavorite, onRegene
 
       {/* Grid */}
       <div className={cn(
-        "flex-1 overflow-y-auto p-5 grid gap-3 content-start",
+        "flex-1 overflow-y-auto p-4 grid gap-3 content-start",
         columns === 2 ? "grid-cols-2" : "grid-cols-3"
       )}>
-        {displayed.map((image, i) => (
+        {displayed.map((image) => (
           <ImageCard
             key={image.id}
             image={image}
